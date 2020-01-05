@@ -4,9 +4,9 @@
 // @version      0.1.7
 // @description  Add Ebay Auction Deadlines to Google Calendar
 // @author       dwbfox
-// @updateURL    https://raw.githubusercontent.com/dwbfox/ebay-auction-google-calendar/master/ebay-google-calendar.user.js
 // @license      GPLv3
-// @match        *://*.ebay.com/itm/*
+// @match        *://*.ebay.de/itm/*
+// @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js
 // @run-at       document-end
 // ==/UserScript==
 (function () {
@@ -34,7 +34,12 @@
     function getAuctionEndDate() {
         var endDate = new Date();
         try {
-            endDate.setTime(document.querySelector('.timeMs').getAttribute('timems'));
+            //endDate.setTime(document.querySelector('.timeMs').getAttribute('timems'));
+            var dateString = document.querySelector('.vi-tm-left').innerText.replace('(', '').replace(')','')
+            var ex = "09. Jan. 2020 15:54:55 MEZ"
+            var m = moment(dateString, 'DD. MMM. YYYY HH:mm:ss', 'de');
+            console.log("Moment", m)
+            endDate = m.toDate()
         } catch (Exception) {
             throw new Error('End date not found. This page is likely not an auction page or the HTML structure has changed.');
         }
